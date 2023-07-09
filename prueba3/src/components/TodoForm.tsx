@@ -21,8 +21,7 @@ const TodoForm = (props: TodoFormProps) => {
                 value={props.todo?.title ?? ""}
                 className="form-control" 
                 id="title" 
-                name="title" 
-                placeholder="name@example.com" 
+                name="title"                 
                 onChange={props.onChange} 
                 />
       </div>      

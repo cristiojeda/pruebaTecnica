@@ -22,7 +22,7 @@ const TodoTable = (props: TodoTableProps) => {
         <tbody>
           {
             props.todos.map((todo) => (
-              <tr key={todo.id}>
+              <tr key={todo.id} className={`${!todo.completed && 'table-warning'}`}>
                 <td>{todo.id}</td>
                 <td style={{textAlign: "left"}}>{todo.title}</td>
                 <td>{todo.completed ? "Yes" : "No"}</td>

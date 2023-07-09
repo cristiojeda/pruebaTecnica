@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import './App.css'
+import './App.scss'
 import { createTodos, getTodos, removeTodos, updateTodos } from './api'
 import TodoTable from './components/TodoTable'
 import TodoForm from './components/TodoForm'
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 function App() {
   const [editar, setEditar] = useState<{editar: boolean, item: any}>({editar: false, item: undefined})
   const [todos, setTodos] = useState<TodoAll[]>([])
+  const [filterCompleted, setFilterCompleted] = useState(-1)
 
 
   useEffect(() => {
@@ -45,6 +46,10 @@ function App() {
         [name]: value
       }
     })
+  }
+
+  const handleChangeSelect = ({target: {value}}: ChangeEvent<HTMLSelectElement>) => {
+    setFilterCompleted(Number(value))
   }
 
   const handleChangeCheckbox = ({target: {name, checked}}: ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +90,7 @@ function App() {
   const handleSubmit = async (event: FormEvent) => {
 
     event.preventDefault()
-
-
+    
     if (!editar.item.title) {
       Swal.fire({
         icon: 'info',
@@ -96,6 +100,14 @@ function App() {
       return
     }
 
+    if (!(/^[A-Z ]*$/i.test(editar.item.title))) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Mensaje',
+        text: 'Debe contener solo letras',        
+      })
+      return
+    }
 
     try {
 
@@ -141,6 +153,10 @@ function App() {
     }
   }
 
+  const todosFiltered = filterCompleted === -1
+    ? todos 
+    : todos.filter(todo => todo.completed === Boolean(filterCompleted) )
+
   return (    
     <div>
       <h2 className='mb-3'>Prueba 3 - TODO</h2>
@@ -151,8 +167,13 @@ function App() {
           <>
           <div style={{textAlign: 'left'}} className='mb-2'>
             <button type="button" className="btn btn-primary" onClick={handleNuevo}>Nuevo</button>
+            <select className="form-select mt-3" onChange={handleChangeSelect} value={filterCompleted}>
+              <option value={-1}>All</option>
+              <option value={1}>Completed</option>
+              <option value={0}>No completed</option>                                          
+            </select>
           </div>
-          <TodoTable todos={todos} onEditar={handleEditar} onEliminar={handleEliminar}></TodoTable>
+          <TodoTable todos={todosFiltered} onEditar={handleEditar} onEliminar={handleEliminar}></TodoTable>
           </>
         )
         : (
