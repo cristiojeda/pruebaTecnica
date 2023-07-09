@@ -8,7 +8,7 @@ import Swal from 'sweetalert2'
 
 function App() {
   const [editar, setEditar] = useState<{editar: boolean, item: any}>({editar: false, item: undefined})
-  const [todos, setTodos] = useState<TodoAll[]>([])
+  const [todos, setTodos] = useState<any>([])
   const [filterCompleted, setFilterCompleted] = useState(-1)
 
 
@@ -18,8 +18,8 @@ function App() {
 
   const getAll = async () => {
     try {
-      const response = await getTodos()
-      setTodos(response.data)      
+      const {data} = await getTodos()
+      setTodos(data )      
       
     } catch(error: any) {
       console.log(error);      
@@ -155,7 +155,7 @@ function App() {
 
   const todosFiltered = filterCompleted === -1
     ? todos 
-    : todos.filter(todo => todo.completed === Boolean(filterCompleted) )
+    : todos.filter((todo: any) => todo.completed === Boolean(filterCompleted) )
 
   return (    
     <div>

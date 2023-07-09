@@ -7,7 +7,7 @@ export const jsonPlaceHolderAPI = axios.create({
 
 
 export const getTodos = async () => {
-  return await jsonPlaceHolderAPI.get<TodoAll[]>('/todos')
+  return await jsonPlaceHolderAPI.get<any>('/todos')
 }
 
 export const createTodos = async (body: TodoAll) => {
